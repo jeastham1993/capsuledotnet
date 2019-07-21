@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using CapsuleDotNet.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CapsuleDotNet.Models
 {
     public class Party
     {
+        private Party() { }
+
+        private Party(string partyType)
+        {
+            this.Type = partyType;
+        }
+
+        public static Party Create(PartyType type)
+        {
+            return new Party(type.ToFriendlyString());
+        }
+
         [JsonProperty("addresses")]
         private List<Address> _addresses;
 
@@ -26,9 +39,9 @@ namespace CapsuleDotNet.Models
         [JsonProperty("tags")]
         private List<Tag> _tags;
 
-        [JsonProperty]
-        public long Id { get; private set; }
-
+        [JsonProperty("id")]
+        public long? Id { get; private set; }
+    
         public string Type { get; }
 
         public string FirstName { get; set; }
@@ -45,11 +58,11 @@ namespace CapsuleDotNet.Models
 
         public string About { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; private set; }
 
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; private set; }
 
-        public DateTime? LastContactedAt { get; set; }
+        public DateTime? LastContactedAt { get; private set; }
 
         [JsonProperty("isRestricted")]
         public bool IsRestricted { get; private set; }
@@ -86,7 +99,7 @@ namespace CapsuleDotNet.Models
         {
             if (_addresses.Any(p => p.Id == id))
             {
-                _addresses.Remove(_addresses.FirstOrDefault(p => p.Id == id));
+                _addresses.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
 
@@ -104,7 +117,7 @@ namespace CapsuleDotNet.Models
         {
             if (_emailAddresses.Any(p => p.Id == id))
             {
-                _emailAddresses.Remove(_emailAddresses.FirstOrDefault(p => p.Id == id));
+                _emailAddresses.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
         public void AddPhoneNumber(PhoneNumberType type, string number)
@@ -121,7 +134,7 @@ namespace CapsuleDotNet.Models
         {
             if (_phoneNumbers.Any(p => p.Id == id))
             {
-                _phoneNumbers.Remove(_phoneNumbers.FirstOrDefault(p => p.Id == id));
+                _phoneNumbers.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
 
@@ -139,7 +152,7 @@ namespace CapsuleDotNet.Models
         {
             if (_websites.Any(p => p.Id == id))
             {
-                _websites.Remove(_websites.FirstOrDefault(p => p.Id == id));
+                _websites.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
 
@@ -157,7 +170,7 @@ namespace CapsuleDotNet.Models
         {
             if (_tags.Any(p => p.Id == id))
             {
-                _tags.Remove(_tags.FirstOrDefault(p => p.Id == id));
+                _tags.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
 
@@ -175,7 +188,7 @@ namespace CapsuleDotNet.Models
         {
             if (_fields.Any(p => p.Id == id))
             {
-                _fields.Remove(_fields.FirstOrDefault(p => p.Id == id));
+                _fields.FirstOrDefault(p => p.Id == id).Delete = true;
             }
         }
     }

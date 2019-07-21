@@ -7,19 +7,21 @@ using System.Threading.Tasks;
 using CapsuleDotNet.Common;
 using CapsuleDotNet.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CapsuleDotNet
 {
     public static class CapsuleClient
     {
         private static HttpClient _httpClient;
-        private static bool _isInit;
+        internal static bool _isInit;
 
         public static bool Init(string apiKey)
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://api.capsulecrm.com/api/v2/");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = _httpClient.GetAsync("countries").Result;
 
@@ -39,26 +41,31 @@ namespace CapsuleDotNet
             return true;
         }
 
-        internal async static Task<T> baseGetRequest<T>(string endpoint, DateTime? since, int page, int perPage, EmbedEnum[] embed) where T : DefaultObjectWrapper {
+        internal async static Task<T> baseGetRequest<T>(string endpoint, DateTime? since, int page, int perPage, Embed[] embed) where T : DefaultObjectWrapper
+        {
             var requestString = new StringBuilder($"{endpoint}?");
 
-            if (page < 1) {
+            if (page < 1)
+            {
                 page = 1;
             }
 
             requestString.Append($"page={page}&");
 
-            if (perPage > 100){
+            if (perPage > 100)
+            {
                 perPage = 100;
             }
 
             requestString.Append($"perPage={perPage}&");
 
-            if (since != null && since.HasValue){
+            if (since != null && since.HasValue)
+            {
                 requestString.Append($"since={since.Value.ToString("yyyy-MM-dd")}");
             }
 
-            if (embed != null && embed.Length > 0){
+            if (embed != null && embed.Length > 0)
+            {
                 requestString.Append($"embed={string.Join(",", embed)}");
             }
 
@@ -73,7 +80,18 @@ namespace CapsuleDotNet
 
             if (body != null)
             {
-                content = new StringContent(JsonConvert.SerializeObject(body));
+                var jsonContent = JsonConvert.SerializeObject(body,
+                    Formatting.None,
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+
+                    });
+
+                content = new StringContent(jsonContent
+                    , Encoding.UTF8
+                    , "application/json");
             }
 
             switch (method.ToLower())
@@ -92,14 +110,23 @@ namespace CapsuleDotNet
                     break;
             }
 
-            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK || responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 responseObject = JsonConvert.DeserializeObject<T>(await responseMessage.Content.ReadAsStringAsync());
 
-                if (responseMessage.Headers.Any(p => p.Key == "Link")){
+                if (responseMessage.Headers.Any(p => p.Key == "Link"))
+                {
                     responseObject.Pagination.Parse(responseMessage.Headers.FirstOrDefault(p => p.Key == "Link").Value);
                 }
-            };
+            }
+            else if (responseMessage.StatusCode == System.Net.HttpStatusCode.NoContent){
+                return default(T);
+            }
+            else
+            {
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                throw new InvalidOperationException(responseContent);
+            }
 
             return responseObject;
         }

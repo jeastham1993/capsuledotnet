@@ -26,7 +26,7 @@ namespace CapsuleDotNet.Models{
 
             return new Category(name, colour);
         }
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         public string Name { get; set; }
 

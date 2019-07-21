@@ -10,18 +10,21 @@ namespace CapsuleDotNet.Models{
             }
 
             return new PhoneNumber(){
-                Type = nameof(type),
+                Type = type.ToFriendlyString(),
                 Number = number
             };
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         [JsonProperty]
         public string Type { get; private set; }
         
         [JsonProperty]
         public string Number { get; private set; }
+
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

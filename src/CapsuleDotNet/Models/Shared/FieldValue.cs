@@ -12,12 +12,15 @@ namespace CapsuleDotNet.Models{
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         [JsonProperty]
         public object Value { get; private set; }
 
         [JsonProperty]
         public FieldDefinition Definition { get; private set; }
+
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

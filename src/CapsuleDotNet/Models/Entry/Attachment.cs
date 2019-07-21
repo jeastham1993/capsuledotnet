@@ -14,7 +14,7 @@ namespace CapsuleDotNet.Models{
             return new Attachment("", Path.GetFileName(filePath), "application/pdf", File.ReadAllBytes(filePath).LongLength);
         }
 
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         internal string Token { get; private set; }
 

@@ -9,7 +9,7 @@ namespace CapsuleDotNet.Models{
             this.UpdateLastContacted = true;
         }
 
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         public string Name { get; private set; }
 

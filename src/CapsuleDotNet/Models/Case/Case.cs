@@ -7,7 +7,7 @@ namespace CapsuleDotNet.Models{
     {
         private List<Tag> _tags;
         private List<FieldValue> _fields;
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public Party Party { get; set; }
         public string Description { get; set; }
         public User Owner { get; set; }

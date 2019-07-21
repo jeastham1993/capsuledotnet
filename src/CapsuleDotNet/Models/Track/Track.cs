@@ -11,7 +11,7 @@ namespace CapsuleDotNet.Models
         }
 
         public static Track Create(string description, TrackDirection direction, DateTime? trackDateOn){
-            return new Track(description, nameof(direction), trackDateOn);
+            return new Track(description, direction.ToFriendlyString(), trackDateOn);
         }
         public long? Id { get; set; }
         public string Description { get; set; }

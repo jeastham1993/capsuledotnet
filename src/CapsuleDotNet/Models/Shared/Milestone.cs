@@ -19,7 +19,7 @@ namespace CapsuleDotNet.Models{
 
             return new Milestone(name, probability);
         }
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         public string Name { get; set; }
 

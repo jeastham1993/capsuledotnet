@@ -16,7 +16,7 @@ namespace CapsuleDotNet.Models{
 
             return new LostReason(name, includedForConversion); 
         }
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         public string Name { get; set; }
 

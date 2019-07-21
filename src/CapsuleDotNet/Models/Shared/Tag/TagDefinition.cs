@@ -9,7 +9,7 @@ namespace CapsuleDotNet.Models{
         [JsonProperty("definitions")]
         private List<FieldDefinition> _definitions;
 
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         public string Name { get; private set; }
 

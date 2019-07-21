@@ -13,7 +13,7 @@ namespace CapsuleDotNet.Models
         }
 
         public static TrackDefinition Create(string description, string tag, CaptureRule captureRule, TrackDirection direction){
-            return new TrackDefinition(description, tag, nameof(captureRule), nameof(direction));
+            return new TrackDefinition(description, tag, captureRule.ToFriendlyString(), direction.ToFriendlyString());
         }
         public int? Id { get; set; }
         public string Description { get; set; }

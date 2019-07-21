@@ -16,11 +16,13 @@ namespace CapsuleDotNet.Models{
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
         [JsonProperty]
         public string Name { get; private set; }
 
         [JsonProperty]
         public string Description { get; private set; }
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

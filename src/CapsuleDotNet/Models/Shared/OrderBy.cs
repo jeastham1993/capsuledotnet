@@ -9,7 +9,7 @@ namespace CapsuleDotNet.Models{
         }
 
         public static OrderBy Create(string field, Direction direction){
-            return new OrderBy(nameof(direction), field);
+            return new OrderBy(direction.ToFriendlyString(), field);
         }
         public string Direction { get; set; }
 

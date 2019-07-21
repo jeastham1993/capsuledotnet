@@ -10,18 +10,20 @@ namespace CapsuleDotNet.Models{
             }
 
             return new EmailAddress(){
-                Type = nameof(type),
+                Type = type.ToFriendlyString(),
                 Address = address
             };
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         [JsonProperty]
         public string Address { get; private set; }
 
         [JsonProperty]
         public string Type { get; private set; }
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

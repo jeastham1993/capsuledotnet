@@ -19,10 +19,10 @@ namespace CapsuleDotNet.Models{
         }
 
         public static Entry Create(EntryType type){
-            return new Entry(nameof(type));
+            return new Entry(type.ToFriendlyString());
         }
 
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
         public string Type { get; private set; }
         public DateTime? CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
@@ -49,6 +49,20 @@ namespace CapsuleDotNet.Models{
         public void RemoveParty(long id){
             if (this._parties != null && this._parties.Any(p => p.Id == id)){
                 _parties.Remove(_parties.FirstOrDefault(p => p.Id == id));
+            }
+        }
+
+        public void AddParticipant(string address, string name, ParticipantRole role){
+            if (this._participants == null){
+                _participants = new List<Participant>(1);
+            }
+
+            _participants.Add(Participant.Create(address, name, role));
+        }
+
+        public void RemoveParticipant(long id){
+            if (this._participants != null && this._participants.Any(p => p.Id == id)){
+                _participants.Remove(_participants.FirstOrDefault(p => p.Id == id));
             }
         }
     

@@ -15,15 +15,15 @@ namespace CapsuleDotNet.Models
 
             return new Website()
             {
-                Service = nameof(service),
-                Type = nameof(type),
+                Service = service.ToFriendlyString(),
+                Type = type.ToFriendlyString(),
                 Address = address,
                 Url = url
             };
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         [JsonProperty]
         public string Service { get; private set; }
@@ -36,5 +36,8 @@ namespace CapsuleDotNet.Models
 
         [JsonProperty]
         public string Url { get; private set; }
+
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

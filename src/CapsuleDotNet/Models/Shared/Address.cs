@@ -15,7 +15,7 @@ namespace CapsuleDotNet.Models{
             }
             
             var newAddress = new Address();
-            newAddress.Type = nameof(type);
+            newAddress.Type = type.ToFriendlyString();
             newAddress.Street = street;
             newAddress.City = city;
             newAddress.State = state;
@@ -26,7 +26,7 @@ namespace CapsuleDotNet.Models{
         }
 
         [JsonProperty]
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
 
         [JsonProperty]
         public string Type { get; private set; }
@@ -45,5 +45,8 @@ namespace CapsuleDotNet.Models{
 
         [JsonProperty]
         public string Zip { get; private set; }
+
+        [JsonProperty("_delete")]
+        public bool Delete { get; set; }
     }
 }

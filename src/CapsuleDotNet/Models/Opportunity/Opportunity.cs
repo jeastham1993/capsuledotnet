@@ -9,7 +9,7 @@ namespace CapsuleDotNet.Models {
     {
         private List<Tag> _tags;
         private List<FieldValue> _fields;
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Party Party { get; set; }

@@ -15,7 +15,7 @@ namespace CapsuleDotNet.Models
 
             return new User(userName);
         }
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public string Name { get; private set; }
         public string Username { get; set; }
         public Party Party { get; set; }
@@ -28,20 +28,20 @@ namespace CapsuleDotNet.Models
         public bool? TaskReminder { get; set; }
 
         public void SetEmailPreference(EmailPreference preference){
-            if (this.EmailPreference != nameof(preference)){
-                this.EmailPreference = nameof(preference);
+            if (this.EmailPreference != preference.ToFriendlyString()){
+                this.EmailPreference = preference.ToFriendlyString();
             }
         }
 
         public void SetLocale(Locale locale){
-            if (this.Locale != nameof(locale)){
-                this.Locale = nameof(locale);
+            if (this.Locale != locale.ToFriendlyString()){
+                this.Locale = locale.ToFriendlyString();
             }
         }
 
         public void SetClickToCallPreference(ClickToCallPreference preference){
-            if (this.ClickToCallPreference != nameof(preference)){
-                this.ClickToCallPreference = nameof(preference);
+            if (this.ClickToCallPreference != preference.ToFriendlyString()){
+                this.ClickToCallPreference = preference.ToFriendlyString();
             }
         }
     }

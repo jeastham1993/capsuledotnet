@@ -12,13 +12,7 @@ namespace CapsuleDotNet.Models{
         }
 
         public static Condition Create(string field, Operator operatorEnum, object value){
-            var operatorString = OperatorEnumMapper.Mapping.FirstOrDefault(p => p.Key == operatorEnum).Value;
-
-            if (operatorString == null){
-                throw new ArgumentException("Invalid operator");
-            }
-            
-            return new Condition(field, operatorString, value);
+            return new Condition(field, operatorEnum.ToFriendlyString(), value);
         }
 
         public string Field { get; private set; }

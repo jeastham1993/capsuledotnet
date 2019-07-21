@@ -44,7 +44,7 @@ namespace CapsuleDotNet.Models{
             
             return new Task(description, opp);
         }
-        public long Id { get; private set; }
+        public long? Id { get; private set; }
         public DateTime? CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
         public string Description { get; set; }

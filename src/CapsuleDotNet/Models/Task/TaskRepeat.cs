@@ -9,7 +9,7 @@ namespace CapsuleDotNet.Models{
         }
 
         public static TaskRepeat Create(TaskRepeatFrequency frequency, int interval, string on){
-            return new TaskRepeat(nameof(frequency), interval, on);
+            return new TaskRepeat(frequency.ToFriendlyString(), interval, on);
         }
 
         public string Frequency { get; private set; }
@@ -17,7 +17,7 @@ namespace CapsuleDotNet.Models{
         public string On { get; private set; }
         
         internal void Update(TaskRepeatFrequency frequency, int interval, string on){
-            this.Frequency = nameof(frequency);
+            this.Frequency = frequency.ToFriendlyString();
             this.Interval = interval;
             this.On = on;
         }

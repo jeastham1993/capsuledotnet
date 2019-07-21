@@ -12,9 +12,9 @@ namespace CapsuleDotNet.Models
         }
 
         public static TaskDefinition Create(string description, DaysAfterRule daysAfterRule, int daysAfter, int displayOrder){
-            return new TaskDefinition(description, nameof(daysAfterRule), daysAfter, displayOrder);
+            return new TaskDefinition(description, daysAfterRule.ToFriendlyString(), daysAfter, displayOrder);
         }
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public string Description { get; set; }
         public string DaysAfterRule { get; private set; }
         public int DaysAfter { get; set; }
