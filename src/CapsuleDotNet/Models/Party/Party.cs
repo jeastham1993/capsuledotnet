@@ -51,6 +51,9 @@ namespace CapsuleDotNet.Models
 
         public DateTime? LastContactedAt { get; set; }
 
+        [JsonProperty("isRestricted")]
+        public bool IsRestricted { get; private set; }
+
         [JsonIgnore]
         public IReadOnlyCollection<Address> Addresses => _addresses;
 
