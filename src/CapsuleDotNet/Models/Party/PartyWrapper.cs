@@ -23,7 +23,7 @@ namespace CapsuleDotNet.Models{
         }
 
         [JsonProperty("parties")]
-        public List<Party> Parties {get; set;}
+        public IEnumerable<Party> Parties {get; set;}
 
         [JsonProperty("party")]
         public Party Party {get; set;}

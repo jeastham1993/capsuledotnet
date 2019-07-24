@@ -9,12 +9,14 @@ namespace CapsuleDotNet
 {
     public static class PartyResource
     {
-        static PartyResource(){
-            if (CapsuleClient._isInit == false){
+        static PartyResource()
+        {
+            if (CapsuleClient._isInit == false)
+            {
                 throw new Exception("Capsule client must first be initialised with a valid API key");
             }
         }
-        
+
         private const string BASE_ENDPOINT = "parties";
 
         public static Party Create(Party party)
@@ -32,7 +34,7 @@ namespace CapsuleDotNet
 
             return response.Party;
         }
-        
+
         public static Party Update(long partyId, Party party)
         {
             return PartyResource.UpdateAsync(partyId, party).Result;
@@ -49,11 +51,13 @@ namespace CapsuleDotNet
             return response.Party;
         }
 
-        public static bool Delete(long partyId){
+        public static bool Delete(long partyId)
+        {
             return PartyResource.DeleteAsync(partyId).Result;
         }
 
-        public async static Task<bool> DeleteAsync(long partyId){
+        public async static Task<bool> DeleteAsync(long partyId)
+        {
             var response = await CapsuleClient.makeRequest<PartyWrapper>($"{BASE_ENDPOINT}/{partyId}", "DELETE");
 
             return true;
@@ -69,6 +73,48 @@ namespace CapsuleDotNet
             var parties = await CapsuleClient.baseGetRequest<PartyWrapper>(BASE_ENDPOINT, since, page, perPage, embed);
 
             return parties;
+        }
+
+        public static PartyWrapper ListEmployees(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
+        {
+            return PartyResource.ListEmployeesAsync(partyId, page, perPage, embed).Result;
+        }
+
+        public async static Task<PartyWrapper> ListEmployeesAsync(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
+        {
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{partyId}/people?page={page}&perPage={perPage}");
+
+            if (embed != null)
+            {
+                endpoint.Append($"?embed={String.Join(",", embed)}");
+            }
+
+            var employees = await CapsuleClient.makeRequest<PartyWrapper>(endpoint.ToString(), "GET");
+
+            return employees;
+        }
+
+        public static PartyWrapper ListDeleted(DateTime since){
+            return PartyResource.ListDeletedAsync(since).Result;
+        }
+
+        public async static Task<PartyWrapper> ListDeletedAsync(DateTime since)
+        {
+            var deletedParties = await CapsuleClient.makeRequest<PartyWrapper>($"{BASE_ENDPOINT}/deleted?since={since.ToString("yyyy/MM/dd")}", "GET");
+
+            return deletedParties;
+        }
+
+        public static PartyWrapper SearchParties(string query, int page = 1, int perPage = 20){
+            return PartyResource.SearchPartiesAsync(query, page, perPage).Result;
+        }
+
+        public async static Task<PartyWrapper> SearchPartiesAsync(string query, int page = 1, int perPage = 20){
+            var endpoint = $"{BASE_ENDPOINT}/search?q={query}&page={page}&perPage={perPage}";
+
+            var foundParties = await CapsuleClient.makeRequest<PartyWrapper>(endpoint, "GET");
+
+            return foundParties;
         }
 
         public static Party Show(string partyId, Embed[] embed = null)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CapsuleDotNet.Common;
 using CapsuleDotNet.Models;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,7 @@ namespace CapsuleDotNet.IntegrationTest
             var parties = PartyResource.List();
 
             // Assert
-            Assert.True(parties.Parties.Count > 0);
+            Assert.True(parties.Parties.AsQueryable().Count() > 0);
         }
 
         [Fact]
@@ -51,6 +52,20 @@ namespace CapsuleDotNet.IntegrationTest
         }
 
         [Fact]
+        public void SEARCH_PARTY()
+        {
+            // Arrange;
+            var queryText = "John";
+
+            // Act
+            var party = PartyResource.SearchParties(queryText);
+
+            // Assert
+            Assert.Equal("John", party.Parties.FirstOrDefault().FirstName);
+            Assert.Equal("Doe", party.Parties.FirstOrDefault().LastName);
+        }
+
+        [Fact]
         public void GET_MULTIPLE_PARTIES()
         {
             // Arrange
@@ -64,7 +79,7 @@ namespace CapsuleDotNet.IntegrationTest
             var party = PartyResource.ShowMultipleAsync(partyIds, embed).Result;
 
             // Assert
-            Assert.Equal(2, party.Parties.Count);
+            Assert.Equal(2, party.Parties.AsQueryable().Count());
         }
 
         [Fact]
