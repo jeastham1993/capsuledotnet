@@ -3,6 +3,7 @@ using System;
 namespace CapsuleDotNet.Models{
     public class Milestone
     {
+        private Milestone(){}
         private Milestone(string name, int probability){
             this.Name = name;
             this.Probability = probability;

@@ -4,6 +4,7 @@ namespace CapsuleDotNet.Models
 {
     public class User
     {
+        private User(){}
         private User(string username){
             this.Username = username;
         }

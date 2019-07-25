@@ -11,10 +11,7 @@ namespace CapsuleDotNet
     {
         static PartyResource()
         {
-            if (CapsuleClient._isInit == false)
-            {
-                throw new Exception("Capsule client must first be initialised with a valid API key");
-            }
+            CapsuleClient.IsInit();
         }
 
         private const string BASE_ENDPOINT = "parties";

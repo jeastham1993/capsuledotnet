@@ -14,7 +14,14 @@ namespace CapsuleDotNet
     public static class CapsuleClient
     {
         private static HttpClient _httpClient;
-        internal static bool _isInit;
+        private static bool _isInit;
+
+        internal static void IsInit(){
+            if (CapsuleClient._isInit == false)
+            {
+                throw new Exception("Capsule client must first be initialised with a valid API key");
+            }
+        }
 
         public static bool Init(string apiKey)
         {
@@ -112,7 +119,9 @@ namespace CapsuleDotNet
 
             if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK || responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                responseObject = JsonConvert.DeserializeObject<T>(await responseMessage.Content.ReadAsStringAsync());
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                
+                responseObject = JsonConvert.DeserializeObject<T>(responseContent);
 
                 if (responseMessage.Headers.Any(p => p.Key == "Link"))
                 {
