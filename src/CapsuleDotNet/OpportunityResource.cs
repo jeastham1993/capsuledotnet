@@ -85,6 +85,21 @@ namespace CapsuleDotNet
             return opportunity;
         }
     
-        
+        public static Opportunity Create(Opportunity opportunity)
+        {
+            return OpportunityResource.CreateAsync(opportunity).Result;
+        }
+
+        public async static Task<Opportunity> CreateAsync(Opportunity opportunity)
+        {
+            var wrapperObject = OpportunityWrapper.Load(opportunity);
+
+            var response = await CapsuleClient.makeRequest<OpportunityWrapper>(BASE_ENDPOINT,
+                "POST",
+                wrapperObject);
+
+            return response.Opportunity;
+        }
+
     }
 }
