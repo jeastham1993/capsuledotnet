@@ -42,5 +42,49 @@ namespace CapsuleDotNet
             return opportunities;
         }
 
+        public static Opportunity Show(long opportunityId, Embed[] embed = null)
+        {
+            return OpportunityResource.ShowAsync(opportunityId, embed).Result;
+        }
+
+        public async static Task<Opportunity> ShowAsync(long opportunityId, Embed[] embed = null)
+        {
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{opportunityId}");
+
+            if (embed != null)
+            {
+                endpoint.Append($"?embed={String.Join(",", embed)}");
+            }
+
+            var apiResponse = await CapsuleClient.makeRequest<OpportunityWrapper>(endpoint.ToString(), "get");
+
+            return apiResponse.Opportunity;
+        }
+
+        public static OpportunityWrapper ShowMultiple(long[] opportunityIds, Embed[] embed = null)
+        {
+            return OpportunityResource.ShowMultipleAsync(opportunityIds, embed).Result;
+        }
+
+        public async static Task<OpportunityWrapper> ShowMultipleAsync(long[] opportunityIds, Embed[] embed = null)
+        {
+            if (opportunityIds.Length > 10)
+            {
+                throw new ArgumentException("A max of 10 opportunity id's can be sent at any one time");
+            }
+
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{string.Join(",", opportunityIds)}");
+
+            if (embed != null)
+            {
+                endpoint.Append($"?embed={String.Join(",", embed)}");
+            }
+
+            var opportunity = await CapsuleClient.makeRequest<OpportunityWrapper>(endpoint.ToString(), "get");
+
+            return opportunity;
+        }
+    
+        
     }
 }
