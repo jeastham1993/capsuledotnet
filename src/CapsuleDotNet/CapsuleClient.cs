@@ -79,11 +79,53 @@ namespace CapsuleDotNet
             return await CapsuleClient.makeRequest<T>(requestString.ToString(), "GET");
         }
 
+        internal async static Task<bool> makeRequest(string endpoint, string method, object body = null){
+            var responseMessage = await CapsuleClient.makeApiCall(endpoint: endpoint, method: method, body: body);
+
+            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK 
+                || responseMessage.StatusCode == System.Net.HttpStatusCode.Created
+                || responseMessage.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
         internal async static Task<T> makeRequest<T>(string endpoint, string method, object body = null) where T : DefaultObjectWrapper
         {
+            var responseMessage = await CapsuleClient.makeApiCall(endpoint, body, method);
+            T responseObject;
+
+            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK 
+                || responseMessage.StatusCode == System.Net.HttpStatusCode.Created
+                || responseMessage.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                
+                responseObject = JsonConvert.DeserializeObject<T>(responseContent);
+
+                if (responseMessage.Headers.Any(p => p.Key == "Link"))
+                {
+                    responseObject.Pagination.Parse(responseMessage.Headers.FirstOrDefault(p => p.Key == "Link").Value);
+                }
+            }
+            else if (responseMessage.StatusCode == System.Net.HttpStatusCode.NoContent){
+                return default(T);
+            }
+            else
+            {
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                throw new InvalidOperationException(responseContent);
+            }
+
+            return responseObject;
+        }
+
+        private static async Task<HttpResponseMessage> makeApiCall(string endpoint, object body, string method) {
             HttpResponseMessage responseMessage = null;
             HttpContent content = null;
-            T responseObject = null;
 
             if (body != null)
             {
@@ -117,27 +159,7 @@ namespace CapsuleDotNet
                     break;
             }
 
-            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK || responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
-            {
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                
-                responseObject = JsonConvert.DeserializeObject<T>(responseContent);
-
-                if (responseMessage.Headers.Any(p => p.Key == "Link"))
-                {
-                    responseObject.Pagination.Parse(responseMessage.Headers.FirstOrDefault(p => p.Key == "Link").Value);
-                }
-            }
-            else if (responseMessage.StatusCode == System.Net.HttpStatusCode.NoContent){
-                return default(T);
-            }
-            else
-            {
-                var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                throw new InvalidOperationException(responseContent);
-            }
-
-            return responseObject;
+            return responseMessage;
         }
     }
 }
