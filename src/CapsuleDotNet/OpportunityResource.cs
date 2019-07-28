@@ -119,5 +119,19 @@ namespace CapsuleDotNet
 
             return response.Opportunity;
         }
+
+        
+
+        public static bool Delete(long opportunityId)
+        {
+            return OpportunityResource.DeleteAsync(opportunityId).Result;
+        }
+
+        public async static Task<bool> DeleteAsync(long opportunityId)
+        {
+            var response = await CapsuleClient.makeRequest<OpportunityWrapper>($"{BASE_ENDPOINT}/{opportunityId}", "DELETE");
+
+            return true;
+        }
     }
 }
