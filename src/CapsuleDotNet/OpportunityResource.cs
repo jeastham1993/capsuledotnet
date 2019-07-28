@@ -101,5 +101,23 @@ namespace CapsuleDotNet
             return response.Opportunity;
         }
 
+
+
+
+        public static Opportunity Update(long opportunityId, Opportunity opportunity)
+        {
+            return OpportunityResource.UpdateAsync(opportunityId, opportunity).Result;
+        }
+
+        public async static Task<Opportunity> UpdateAsync(long opportunityId, Opportunity opportunity)
+        {
+            var wrapperObject = OpportunityWrapper.Load(opportunity);
+
+            var response = await CapsuleClient.makeRequest<OpportunityWrapper>($"{BASE_ENDPOINT}/{opportunityId}",
+                "PUT",
+                wrapperObject);
+
+            return response.Opportunity;
+        }
     }
 }
