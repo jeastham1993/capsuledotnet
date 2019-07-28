@@ -101,9 +101,6 @@ namespace CapsuleDotNet
             return response.Opportunity;
         }
 
-
-
-
         public static Opportunity Update(long opportunityId, Opportunity opportunity)
         {
             return OpportunityResource.UpdateAsync(opportunityId, opportunity).Result;
@@ -183,6 +180,35 @@ namespace CapsuleDotNet
             var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{opportunityId}/parties/{partyId}");
 
             var apiResponse = await CapsuleClient.makeRequest(endpoint.ToString(), "POST");
+
+            return apiResponse;
+        }
+
+        public static bool RemoveAdditionalParty(long opportunityId,long partyId){ 
+            return OpportunityResource.RemoveAdditionalPartyAsync(opportunityId, partyId).Result;
+        }
+    
+        public async static Task<bool> RemoveAdditionalPartyAsync(long opportunityId,long partyId){ 
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{opportunityId}/parties/{partyId}");
+
+            var apiResponse = await CapsuleClient.makeRequest(endpoint.ToString(), "DELETE");
+
+            return apiResponse;
+        }
+        
+        public static CaseWrapper ListAssociatedCases(long opportunityId, int page = 1, int perPage = 20, Embed[] embed = null){
+            return OpportunityResource.ListAssociatedCasesAsync(opportunityId, page, perPage, embed).Result;
+        }
+   
+        public async static Task<CaseWrapper> ListAssociatedCasesAsync(long opportunityId, int page = 1, int perPage = 20, Embed[] embed = null){ 
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{opportunityId}/kases?page={page}&perPage={perPage}");
+
+            if (embed != null)
+            {
+                endpoint.Append($"?embed={String.Join(",", embed)}");
+            }
+
+            var apiResponse = await CapsuleClient.makeRequest<CaseWrapper>(endpoint.ToString(), "GET"); //
 
             return apiResponse;
         }
