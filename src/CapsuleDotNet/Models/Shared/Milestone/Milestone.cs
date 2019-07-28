@@ -4,17 +4,17 @@ namespace CapsuleDotNet.Models{
     public class Milestone
     {
         private Milestone(){}
-        private Milestone(string name, int probability){
+        private Milestone(string name, int? probability){
             this.Name = name;
             this.Probability = probability;
         }
 
-        public static Milestone Create(string name, int probability){
+        public static Milestone Create(string name, int? probability){
             if (string.IsNullOrEmpty(name)){
                 throw new ArgumentException("Name cannot be null or empty");
             }
 
-            if (probability > 100){
+            if (probability.HasValue && probability.Value > 100){
                 probability = 100;
             }
 
@@ -28,9 +28,9 @@ namespace CapsuleDotNet.Models{
 
         public bool Complete { get; set; }
 
-        public int Probability { get; set; }
+        public int? Probability { get; set; }
 
-        public int DaysUntilStale { get; set; }
+        public int? DaysUntilStale { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 

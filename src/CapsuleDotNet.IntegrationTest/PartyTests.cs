@@ -35,7 +35,7 @@ namespace CapsuleDotNet.IntegrationTest
         public void GET_SPECIFIC_PARTY()
         {
             // Arrange
-            var partyId = "187341289";
+            var partyId = 187341289;
             var embed = new Embed[1];
             embed[0] = Embed.Tags;
 
@@ -112,7 +112,7 @@ namespace CapsuleDotNet.IntegrationTest
         [Fact]
         public void UPDATE_PARTY(){
             // Arrange
-            var partyId = "187341289";
+            var partyId = 187341289;
             var embed = new Embed[1];
             embed[0] = Embed.Tags;
             var party = PartyResource.Show(partyId, embed);
@@ -122,7 +122,7 @@ namespace CapsuleDotNet.IntegrationTest
             party.About = newAbout;
 
             // Act
-            var updateResponse = PartyResource.Update(long.Parse(partyId), party);
+            var updateResponse = PartyResource.Update(partyId, party);
 
             // Assert
             Assert.Equal(newAbout, updateResponse.About);

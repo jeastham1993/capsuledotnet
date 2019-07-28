@@ -114,12 +114,12 @@ namespace CapsuleDotNet
             return foundParties;
         }
 
-        public static Party Show(string partyId, Embed[] embed = null)
+        public static Party Show(long partyId, Embed[] embed = null)
         {
             return PartyResource.ShowAsync(partyId, embed).Result;
         }
 
-        public async static Task<Party> ShowAsync(string partyId, Embed[] embed = null)
+        public async static Task<Party> ShowAsync(long partyId, Embed[] embed = null)
         {
             var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{partyId}");
 

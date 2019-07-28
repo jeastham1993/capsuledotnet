@@ -108,6 +108,9 @@ namespace CapsuleDotNet
 
         public async static Task<Opportunity> UpdateAsync(long opportunityId, Opportunity opportunity)
         {
+            // Duration bases cannot be updated
+            opportunity.DurationBasis = null;
+
             var wrapperObject = OpportunityWrapper.Load(opportunity);
 
             var response = await CapsuleClient.makeRequest<OpportunityWrapper>($"{BASE_ENDPOINT}/{opportunityId}",

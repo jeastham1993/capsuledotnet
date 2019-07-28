@@ -4,14 +4,58 @@ using System.Linq;
 using CapsuleDotNet.Common;
 using Newtonsoft.Json;
 
-namespace CapsuleDotNet.Models {
+namespace CapsuleDotNet.Models
+{
     public class Opportunity
     {
+        private Opportunity()
+        {
+
+        }
+
+        private Opportunity(Party party
+            , string name
+            , Milestone milestone)
+        {
+            this.Party = party;
+            this.Name = name;
+            this.Milestone = milestone;
+        }
+
+        public static Opportunity Create(Party nestedParty
+            , string name
+            , Milestone nestedMilestone)
+        {
+            if (nestedParty == null)
+            {
+                throw new ArgumentNullException("Nested party cannot be null or empty");
+            }
+
+            if (nestedMilestone == null)
+            {
+                throw new ArgumentNullException("Nested milestone cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name cannot be null or empty");
+            }
+
+            return new Opportunity(nestedParty, name, nestedMilestone);
+        }
+
+        [JsonProperty("tags")]
         private List<Tag> _tags;
+
+        [JsonProperty("fields")]
+
         private List<FieldValue> _fields;
+
+        [JsonProperty("id")]
         public long? Id { get; private set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string Name { get; set; }
         public Party Party { get; set; }
         public String Description { get; set; }
         public User Owner { get; set; }
@@ -25,9 +69,12 @@ namespace CapsuleDotNet.Models {
         public DateTime? ClosedOn { get; set; }
         [JsonProperty("isRestricted")]
         public bool IsRestricted { get; private set; }
+
+        [JsonIgnore]
         public IReadOnlyCollection<Tag> Tags => _tags;
+        [JsonIgnore]
         public IReadOnlyCollection<FieldValue> Fields => _fields;
-        
+
         public void AddTag(string name, string description)
         {
             if (_tags == null)
