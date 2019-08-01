@@ -11,7 +11,7 @@ namespace CapsuleDotNet.Models{
 
         private CaseWrapper(Case caseObject){
             this.Case = caseObject;
-            this.Kases = null;
+            this.Cases = null;
         }
 
         public static CaseWrapper Load(Case caseObject){
@@ -23,7 +23,7 @@ namespace CapsuleDotNet.Models{
         }
 
         [JsonProperty("kases")]
-        public IEnumerable<Case> Kases {get; set;}
+        public IEnumerable<Case> Cases {get; set;}
 
         [JsonProperty("kase")]
         public Case Case {get; set;}

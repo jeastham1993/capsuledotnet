@@ -5,9 +5,18 @@ using System.Linq;
 namespace CapsuleDotNet.Models{
     public class Case
     {
+        public static Case Create(Party nestedParty
+            ,string name){ 
+                var caseObject = new Case();
+                caseObject.Party = nestedParty;
+                caseObject.Name = name;
+
+                return caseObject;
+            }
         private List<Tag> _tags;
         private List<FieldValue> _fields;
         public long? Id { get; set; }
+        public string Name { get; set; }
         public Party Party { get; set; }
         public string Description { get; set; }
         public User Owner { get; set; }
