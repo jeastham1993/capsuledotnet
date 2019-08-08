@@ -72,25 +72,6 @@ namespace CapsuleDotNet
             return kases;
         }
 
-        public static CaseWrapper ListEmployees(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
-        {
-            return CaseResource.ListEmployeesAsync(partyId, page, perPage, embed).Result;
-        }
-
-        public async static Task<CaseWrapper> ListEmployeesAsync(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
-        {
-            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{partyId}/people?page={page}&perPage={perPage}");
-
-            if (embed != null)
-            {
-                endpoint.Append($"?embed={String.Join(",", embed)}");
-            }
-
-            var employees = await CapsuleClient.makeRequest<CaseWrapper>(endpoint.ToString(), "GET");
-
-            return employees;
-        }
-
         public static CaseWrapper ListDeleted(DateTime since){
             return CaseResource.ListDeletedAsync(since).Result;
         }
@@ -132,6 +113,25 @@ namespace CapsuleDotNet
 
             return party.Case;
         }
+
+        public static PartyWrapper ListAdditionalParties(long partyId, int page = 1, int perPage = 20, Embed[] embed = null){
+            return CaseResource.ListAdditionalPartiesAsync(partyId, page, perPage, embed).Result;
+        }
+
+        public async static Task<PartyWrapper> ListAdditionalPartiesAsync(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
+        {
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{partyId}/parties?page={page}&perPage={perPage}");
+
+            if (embed != null)
+            {
+                endpoint.Append($"&embed={String.Join(",", embed)}");
+            }
+
+            var parties = await CapsuleClient.makeRequest<PartyWrapper>(endpoint.ToString(), "get");
+
+            return parties;
+        }
+
 
         public static CaseWrapper ShowMultiple(string[] partyIds, Embed[] embed = null)
         {

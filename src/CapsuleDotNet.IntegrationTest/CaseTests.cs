@@ -47,6 +47,21 @@ namespace CapsuleDotNet.IntegrationTest
         }
 
         [Fact]
+        public void GET_SPECIFIC_CASE_ADDITIONAL_PARTIES()
+        {
+            // Arrange
+            var caseId = 2675768;
+            var embed = new Embed[1];
+            embed[0] = Embed.Tags;
+
+            // Act
+            var parties = CaseResource.ListAdditionalParties(caseId, 1, 20, embed);
+
+            // Assert
+            Assert.True(parties.Parties.AsQueryable().Count() > 0);
+        }
+
+        [Fact]
         public void SEARCH_CASE()
         {
             // Arrange;

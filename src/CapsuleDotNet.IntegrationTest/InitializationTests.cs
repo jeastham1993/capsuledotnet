@@ -27,7 +27,7 @@ namespace CapsuleDotNet.UnitTest
         [Fact]
         public void INIT_INVALID_API_KEY()
         {
-            Assert.Throws(typeof(ArgumentException), () => {
+            Assert.Throws<ArgumentException>(() => {
                 CapsuleClient.Init("blah blah blah");
             });
         }
