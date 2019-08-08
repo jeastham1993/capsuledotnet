@@ -62,6 +62,32 @@ namespace CapsuleDotNet.IntegrationTest
         }
 
         [Fact]
+        public void ADD_SPECIFIC_CASE_ADDITIONAL_PARTIES()
+        {
+            // Arrange
+            var caseId = 2675768;
+            // Arrange
+            var party = Party.Create(PartyType.PERSON);
+            party.FirstName = $"Case additional party test {DateTime.Now.ToString("yyyyMMddHHmmss")}";
+            party.LastName = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+            party.Title = "Mr";
+            party.JobTitle = "Software Engineer";
+            party.About = "I am a software engineer";
+            party.AddAddress(AddressType.Home, "My street", "My city", "My state", "United Kingdom", "123456");
+            party.AddEmailAddress(EmailAddressType.Home, "capsuledotnet@dotnet.com");
+            party.AddPhoneNumber(PhoneNumberType.Home, "123456");
+            party.AddWebsite(WebsiteType.Home, WebsiteService.GITHUB, "jeastham1993", "https://github.com/jeastham1993");
+            party.AddTag("My tag", "A description of my tag");
+            var createdParty = PartyResource.CreateAsync(party).Result;
+
+            // Act
+            var createResponse = CaseResource.AddAdditionalParty(caseId, createdParty.Id.Value);
+
+            // Assert
+            Assert.True(createResponse);
+        }
+
+        [Fact]
         public void SEARCH_CASE()
         {
             // Arrange;

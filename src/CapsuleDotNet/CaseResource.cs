@@ -114,13 +114,13 @@ namespace CapsuleDotNet
             return party.Case;
         }
 
-        public static PartyWrapper ListAdditionalParties(long partyId, int page = 1, int perPage = 20, Embed[] embed = null){
-            return CaseResource.ListAdditionalPartiesAsync(partyId, page, perPage, embed).Result;
+        public static PartyWrapper ListAdditionalParties(long caseId, int page = 1, int perPage = 20, Embed[] embed = null){
+            return CaseResource.ListAdditionalPartiesAsync(caseId, page, perPage, embed).Result;
         }
 
-        public async static Task<PartyWrapper> ListAdditionalPartiesAsync(long partyId, int page = 1, int perPage = 20, Embed[] embed = null)
+        public async static Task<PartyWrapper> ListAdditionalPartiesAsync(long caseId, int page = 1, int perPage = 20, Embed[] embed = null)
         {
-            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{partyId}/parties?page={page}&perPage={perPage}");
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{caseId}/parties?page={page}&perPage={perPage}");
 
             if (embed != null)
             {
@@ -132,6 +132,17 @@ namespace CapsuleDotNet
             return parties;
         }
 
+        public static bool AddAdditionalParty(long caseId, long partyId)
+        {
+            return CaseResource.AddAdditionalPartyAsync(caseId, partyId).Result;
+        }
+
+        public async static Task<bool> AddAdditionalPartyAsync(long caseId, long partyId)
+        {
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{caseId}/parties/{partyId}");
+
+            return await CapsuleClient.makeRequest(endpoint.ToString(), "post");;
+        }
 
         public static CaseWrapper ShowMultiple(string[] partyIds, Embed[] embed = null)
         {
