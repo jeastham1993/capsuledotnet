@@ -143,6 +143,17 @@ namespace CapsuleDotNet
 
             return await CapsuleClient.makeRequest(endpoint.ToString(), "post");;
         }
+        public static bool DeleteAdditionalParty(long caseId, long partyId)
+        {
+            return CaseResource.DeleteAdditionalPartyAsync(caseId, partyId).Result;
+        }
+
+        public async static Task<bool> DeleteAdditionalPartyAsync(long caseId, long partyId)
+        {
+            var endpoint = new StringBuilder($"{BASE_ENDPOINT}/{caseId}/parties/{partyId}");
+
+            return await CapsuleClient.makeRequest(endpoint.ToString(), "delete");;
+        }
 
         public static CaseWrapper ShowMultiple(string[] partyIds, Embed[] embed = null)
         {
